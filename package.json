@@ -1,0 +1,15 @@
+{
+  "name": "com.ksyci.project-template.core",
+  "version": "1.0.0",
+  "displayName": "Unity Project Template Core",
+  "description": "Core framework and utilities for Unity game development.",
+  "unity": "2022.3",
+  "author": {
+    "name": "AlexyParent",
+    "email": "galexy@me.com",
+    "url": "https://github.com/Ksyci/Project-Template"
+  },
+  "dependencies": {
+    "com.unity.nuget.newtonsoft-json": "3.2.1"
+  }
+}

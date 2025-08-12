@@ -1,0 +1,29 @@
+# Ignore les dossiers de build
+Build/
+build/
+
+# Fichiers temporaires Unity
+*.csproj
+*.unityproj
+*.sln
+*.user
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+
+# Dossiers générés par Unity
+Library/
+Temp/
+Obj/
+Logs/
+
+# Cache de paquet
+Packages/packages-lock.json
+
+# Fichiers système (Mac, Windows)
+.DS_Store
+Thumbs.db

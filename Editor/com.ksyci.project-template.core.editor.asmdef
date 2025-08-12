@@ -1,0 +1,16 @@
+{
+    "name": "com.ksyci.project-template.core.editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:005d1bca7ad602143a0aba6e0b3e6f40"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
