@@ -3,6 +3,8 @@ using UnityEngine;
 
 namespace ProjectTemplate
 {
+    #if UNITY_EDITOR
+
     [CustomPropertyDrawer(typeof(BackupsConfiguration))]
     public class BackupsConfiguration_D : BasicDrawer
     {
@@ -42,4 +44,6 @@ namespace ProjectTemplate
 
         #endregion
     }
+
+    #endif
 }

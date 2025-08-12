@@ -5,6 +5,8 @@ using UnityEngine;
 
 namespace ProjectTemplate
 {
+    #if UNITY_EDITOR
+
     [CustomPropertyDrawer(typeof(Translator))]
     public class Translator_D : BasicDrawer
     {
@@ -141,4 +143,6 @@ namespace ProjectTemplate
 
         #endregion
     }
+
+    #endif
 }

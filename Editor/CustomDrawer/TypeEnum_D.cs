@@ -4,6 +4,8 @@ using UnityEngine;
 
 namespace ProjectTemplate
 {
+    #if UNITY_EDITOR
+
     [CustomPropertyDrawer(typeof(TypeEnum<>), true)]
     public class TypeEnumDrawer : BasicDrawer
     {
@@ -51,4 +53,6 @@ namespace ProjectTemplate
 
         #endregion
     }
+
+    #endif
 }

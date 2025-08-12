@@ -6,6 +6,8 @@ using UnityEngine.Events;
 
 namespace ProjectTemplate
 {
+    #if UNITY_EDITOR
+
     [CustomEditor(typeof(ProjectProperties))]
     public class ProjectProperties_E : BasicEditor<ProjectProperties>
     {
@@ -179,4 +181,6 @@ namespace ProjectTemplate
 
         #endregion
     }
+
+    #endif
 }

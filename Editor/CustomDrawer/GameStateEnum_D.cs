@@ -5,6 +5,8 @@ using UnityEngine;
 
 namespace ProjectTemplate
 {
+    #if UNITY_EDITOR
+
     [CustomPropertyDrawer(typeof(GameStateEnum))]
     public class GameStateEnum_D : BasicDrawer
     {
@@ -45,4 +47,6 @@ namespace ProjectTemplate
 
         #endregion
     }
+
+    #endif
 }

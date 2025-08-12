@@ -3,6 +3,8 @@ using UnityEngine;
 
 namespace ProjectTemplate
 {
+    #if UNITY_EDITOR
+
     [CustomPropertyDrawer(typeof(ReadOnlyAttribute))]
     public class ReadOnlyDrawer : BasicDrawer
     {
@@ -26,4 +28,6 @@ namespace ProjectTemplate
 
         #endregion
     }
+
+    #endif
 }

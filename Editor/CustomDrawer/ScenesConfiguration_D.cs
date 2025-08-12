@@ -4,6 +4,8 @@ using UnityEngine;
 
 namespace ProjectTemplate
 {
+    #if UNITY_EDITOR
+
     [CustomPropertyDrawer(typeof(ScenesConfiguration))]
     public class ScenesConfiguration_D : BasicDrawer
     {
@@ -115,4 +117,6 @@ namespace ProjectTemplate
 
         #endregion
     }
+
+    #endif
 }

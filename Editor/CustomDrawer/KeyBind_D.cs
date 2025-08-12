@@ -4,6 +4,8 @@ using UnityEngine;
 
 namespace ProjectTemplate
 {
+    #if UNITY_EDITOR
+
     [CustomPropertyDrawer(typeof(KeyBind))]
     public class KeyBind_D : BasicDrawer
     {
@@ -75,4 +77,6 @@ namespace ProjectTemplate
             }
         }
     }
+
+    #endif
 }
