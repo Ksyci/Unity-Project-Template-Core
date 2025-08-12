@@ -7,7 +7,7 @@
   "author": {
     "name": "AlexyParent",
     "email": "galexy@me.com",
-    "url": "https://github.com/Ksyci/Project-Template"
+    "url": "https://github.com/Ksyci/Unity-Project-Template-Core.git"
   },
   "dependencies": {
     "com.unity.nuget.newtonsoft-json": "3.2.1"
