@@ -43,11 +43,11 @@ namespace ProjectTemplate
             base.OnEnable();
 
             _menus = new()
-        {
-            () => Edition.CreateSection(GLOBAL_SECTION_NAME, GlobalMenu, false),
-            () => Edition.CreateSection(SCENES_SECTION_NAME, ScenesMenu, false),
-            () => Edition.CreateSection(SETTINGS_SECTION_NAME, SettingsMenu, false),
-        };
+            {
+                () => Edition.CreateSection(GLOBAL_SECTION_NAME, GlobalMenu, false),
+                () => Edition.CreateSection(SCENES_SECTION_NAME, ScenesMenu, false),
+                () => Edition.CreateSection(SETTINGS_SECTION_NAME, SettingsMenu, false),
+            };
 
             _ref.UpdatePropertyTypeEnum();
         }

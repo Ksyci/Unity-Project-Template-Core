@@ -1,5 +1,4 @@
 using UnityEditor;
-using UnityEngine;
 
 namespace ProjectTemplate
 {
@@ -10,7 +9,7 @@ namespace ProjectTemplate
     /// Provides common setup and utility methods for inspector customization.
     /// </summary>
     /// <typeparam name="T">The type of Unity Object this editor targets.</typeparam>
-    public abstract partial class BasicEditor<T> : Editor where T : Object
+    public abstract partial class BasicEditor<T> : Editor where T : UnityEngine.Object
     {
         #region Variables
 

@@ -1,19 +1,26 @@
+using System;
 using UnityEditor;
-using UnityEngine;
 
 namespace ProjectTemplate
 {
     #if UNITY_EDITOR
 
-    public abstract partial class BasicEditor<T> : Editor where T : Object
+    public abstract partial class BasicEditor<T> : Editor where T : UnityEngine.Object
     {
         #region Unity Methods
 
         protected virtual void OnEnable()
         {
-            _ref = (T)target;
+            try
+            {
+                _ref = (T)target;
 
-            GetProperties();
+                GetProperties();
+            }
+            catch (InvalidCastException)
+            {
+                return;
+            }
         }
 
         protected virtual void OnDisable()
