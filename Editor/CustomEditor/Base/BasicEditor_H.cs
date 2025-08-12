@@ -3,6 +3,8 @@ using UnityEngine;
 
 namespace ProjectTemplate
 {
+    #if UNITY_EDITOR
+
     /// <summary>
     /// Base class for custom Unity Editors targeting objects of type <typeparamref name="T"/>.
     /// Provides common setup and utility methods for inspector customization.
@@ -35,4 +37,6 @@ namespace ProjectTemplate
 
         #endregion
     }
+
+    #endif
 }

@@ -1,9 +1,10 @@
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.Audio;
 
 namespace ProjectTemplate
 {
+    #if UNITY_EDITOR
+
     public abstract partial class BasicEditor<T> : Editor where T : Object
     {
         #region Unity Methods
@@ -47,4 +48,6 @@ namespace ProjectTemplate
 
         #endregion
     }
+
+    #endif
 }

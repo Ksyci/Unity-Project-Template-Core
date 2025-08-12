@@ -1,10 +1,10 @@
 using System;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 namespace ProjectTemplate
 {
+    #if UNITY_EDITOR
     public abstract partial class BasicDrawer : PropertyDrawer
     {
         #region Overrided Methods
@@ -66,4 +66,6 @@ namespace ProjectTemplate
 
         #endregion
     }
+
+    #endif
 }

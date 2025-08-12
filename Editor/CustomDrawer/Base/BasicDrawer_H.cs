@@ -3,6 +3,8 @@ using UnityEngine;
 
 namespace ProjectTemplate
 {
+    #if UNITY_EDITOR
+
     /// <summary>
     /// Base class for custom property drawers providing common drawing utilities and layout management.
     /// </summary>
@@ -66,4 +68,6 @@ namespace ProjectTemplate
 
         #endregion
     }
+
+    #endif
 }
