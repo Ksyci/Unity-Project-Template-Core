@@ -7,7 +7,7 @@ namespace ProjectTemplate
     {
         #region Properties
 
-        public EnumLib.State CurrentState { get; private set; }
+        public string CurrentState { get; private set; }
 
         #endregion
 
@@ -22,8 +22,8 @@ namespace ProjectTemplate
         /// <summary>
         /// Changes the game state to the specified state.
         /// </summary>
-        /// <param name="state">The new game state to set.</param>
-        public partial void ChangeGameState(EnumLib.State state);
+        /// <param name="stateName">The new game state name.</param>
+        public partial void ChangeGameState(string stateName);
 
         #endregion
     }
