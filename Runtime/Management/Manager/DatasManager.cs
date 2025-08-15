@@ -22,7 +22,7 @@ namespace ProjectTemplate
         {
             _datasMapping.Clear();
 
-            foreach (Backup.IData data in backup.Datas)
+            foreach (Backup.IData data in backup.BackupDatas)
             {
                 Backup.IData copy = data.Clone() as Backup.IData;
                 _datasMapping.Add(copy.Type, copy);

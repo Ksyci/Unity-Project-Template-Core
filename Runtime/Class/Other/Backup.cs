@@ -1,15 +1,14 @@
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting;
-using UnityEngine;
 
 namespace ProjectTemplate
 {
     /// <summary>
     /// Represents a backup with identifying information, including name, hash, scene, index, and creation date.
     /// </summary>
-    [Serializable]
+    [JsonObject(MemberSerialization.OptIn)]
     public class Backup
     {
         #region Interface 
@@ -22,47 +21,31 @@ namespace ProjectTemplate
 
         #endregion
 
-        #region Serialized
-
-        [SerializeField]
-        private int _hash;
-
-        [SerializeField]
-        private int _index;
-
-        [SerializeField]
-        private long _dateTime;
-
-        [SerializeField]
-        private string _name;
-
-        [SerializeField]
-        private string _scene;
-
-        [SerializeField]
-        private List<IData> _datas;
-
-        #endregion
-
         #region Properties
 
-        public int DataCount => _datas.Count;
-        
-        public int Hash => _hash;
+        [JsonProperty]
+        public int Hash { get; private set; }
 
-        public int Index => _index;
+        [JsonProperty]
+        public int Index { get; private set; }
 
-        public string Name => _name;
+        [JsonProperty]
+        public long Time { get; private set; }
 
+        [JsonProperty]
+        public string Name { get; private set; }
+
+        [JsonProperty]
+        public string Scene { get; private set; }
+
+        [JsonProperty(TypeNameHandling = TypeNameHandling.Auto)]
+        private List<IData> Datas { get; set; }
+
+        [JsonIgnore]
         public string Path => Hash == 0 ? Name : Name + '(' + Hash + ')';
 
-        public string Scene => _scene;
-
-        public DateTime DateTime => new(_dateTime);
-
-        public IData this[Type type] => _datas.FirstOrDefault(d => d.Type == type);
-
-        public IReadOnlyList<IData> Datas => _datas;
+        [JsonIgnore]
+        public IReadOnlyList<IData> BackupDatas => Datas;
 
         #endregion
 
@@ -75,15 +58,16 @@ namespace ProjectTemplate
         /// <param name="name">The display name of the backup.</param>
         /// <param name="hash">A unique hash identifier for the backup.</param>
         /// <param name="index">The index position of the backup in storage.</param>
+        [JsonConstructor]
         public Backup(string name, int hash, int index)
         {
-            _name = name;
-            _hash = hash;
-            _index = index;
+            Name = name;
+            Hash = hash;
+            Index = index;
 
-            _datas = new();
-            _dateTime = DateTime.Now.Ticks;
-            _scene = ProjectProperties.Get().FirstScene.Name;
+            Datas = new();
+            Time = DateTime.Now.Ticks;
+            Scene = ProjectProperties.Get().FirstScene.Name;
         }
 
         /// <summary>
@@ -94,7 +78,7 @@ namespace ProjectTemplate
         /// <param name="hash">The new unique hash identifier.</param>
         /// <param name="index">The new index position.</param>
         public Backup(Backup backup, int hash, int index) : this(backup.Name, hash, index) 
-            => _scene = backup.Scene;
+            => Scene = backup.Scene;
 
         /// <summary>
         /// Adds a new datas entry of the specified type if it is not null and not already present.
@@ -106,19 +90,19 @@ namespace ProjectTemplate
         {
             if (newData != null)
             {
-                IData data = this[newData.Type];
+                IData data = Datas.FirstOrDefault(d => d.Type == newData.Type);
 
                 if (data != null)
                 {
                     if (isOverrided)
                     {
-                        int index = _datas.IndexOf(data);
-                        _datas[index] = newData;
+                        int index = Datas.IndexOf(data);
+                        Datas[index] = newData;
                     }
                 }
                 else
                 {
-                    _datas.Add(newData);
+                    Datas.Add(newData);
                 }
             }
         }

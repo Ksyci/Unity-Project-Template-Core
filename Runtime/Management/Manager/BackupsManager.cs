@@ -1,11 +1,11 @@
+using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
-using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace ProjectTemplate
 {
@@ -56,7 +56,7 @@ namespace ProjectTemplate
 
                 return sprite;
             }
-            catch (Exception e) when (e is FileNotFoundException or NullReferenceException)
+            catch (Exception)
             {
                 return null;
             }
@@ -64,59 +64,69 @@ namespace ProjectTemplate
 
         private static partial void WriteBackup(Backup backup)
         {
-            string path = Path.Combine(BackupsFolder, backup.Path + BACKUP_EXTENSION);
+            try
+            {
+                string path = Path.Combine(BackupsFolder, backup.Path + BACKUP_EXTENSION);
 
-            FileStream file = File.Create(path);
+                string json = JsonConvert.SerializeObject(backup, new JsonSerializerSettings
+                {
+                    TypeNameHandling = TypeNameHandling.Auto
+                });
 
-            new BinaryFormatter().Serialize(file, backup);
-
-            file.Close();
+                using var fileStream = File.Create(path);
+                using GZipStream gzip = new(fileStream, CompressionMode.Compress);
+                using StreamWriter writer = new(gzip);
+                writer.Write(json);
+            }
+            catch (Exception e)
+            {
+                Error.Warn(e);
+            }
         }
 
         private static partial void EraseBackup(Backup backup)
         {
-            string path = Path.Combine(BackupsFolder, backup.Path + BACKUP_EXTENSION);
-
-            if (!File.Exists(path))
+            try
             {
-                try
+                string path = Path.Combine(BackupsFolder, backup.Path + BACKUP_EXTENSION);
+
+                if (!File.Exists(path))
                 {
                     throw new Error.FileNotFoundException(path);
                 }
-                catch (Exception e)
-                {
-                    Error.Warn(e);
-                    return;
-                }
-            }
 
-            File.Delete(path);
+                File.Delete(path);
+            }
+            catch (Exception e)
+            {
+                Error.Warn(e);
+            }
         }
 
         private static partial Backup ReadBackup(string path)
         {
-            if (!File.Exists(path))
+            try
             {
-                try
+                if (!File.Exists(path))
                 {
                     throw new Error.FileNotFoundException(path);
                 }
-                catch (Exception e)
+
+                using var fileStream = File.OpenRead(path);
+                using GZipStream gzip = new(fileStream, CompressionMode.Decompress);
+                using StreamReader reader = new(gzip);
+                string json = reader.ReadToEnd();
+
+                return JsonConvert.DeserializeObject<Backup>(json, new JsonSerializerSettings
                 {
-                    Error.Warn(e);
-                    return null;
-                }
+                    TypeNameHandling = TypeNameHandling.Auto
+                });
             }
-
-            BinaryFormatter formatter = new();
-
-            FileStream file = File.Open(path, FileMode.Open);
-
-            Backup backup = (Backup)formatter.Deserialize(file);
-
-            file.Close();
-
-            return backup;
+            catch (Exception e)
+            {
+                Error.Warn(e);
+                return null;
+            }
         }
 
         #endregion
@@ -129,8 +139,6 @@ namespace ProjectTemplate
             int index = FindIndex();
 
             Backup backup = new(name, hash, index);
-
-            DatasManager.Instance.LoadDatas(backup);
 
             _backups.Add(backup.Index, backup);
 
@@ -156,9 +164,9 @@ namespace ProjectTemplate
         {
             try
             {
-                WriteBackup(backup);
-                CaptureScreenshot(backup);
                 DatasManager.Instance.SaveDatas(backup);
+                CaptureScreenshot(backup);
+                WriteBackup(backup);
             }
             catch (NullReferenceException e)
             {

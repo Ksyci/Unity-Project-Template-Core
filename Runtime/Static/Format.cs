@@ -105,10 +105,13 @@ namespace ProjectTemplate
         /// <summary>
         /// Formats a <see cref="DateTime"/> value as a string using a standard format (dd-MM-yyyy, HH:mm).
         /// </summary>
-        /// <param name="dateTime">The date and time to format.</param>
+        /// <param name="time">The date and time to format.</param>
         /// <returns>The formatted date string.</returns>
-        public static string ToDate(DateTime dateTime)
-            => dateTime.ToString(DATE_TIME_FORMAT, CultureInfo.InvariantCulture);
+        public static string ToDate(long time)
+        {
+            DateTime dateTime = new(time);
+            return dateTime.ToString(DATE_TIME_FORMAT, CultureInfo.InvariantCulture);
+        }
 
         #endregion
     }
