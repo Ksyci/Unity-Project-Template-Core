@@ -18,7 +18,7 @@ namespace ProjectTemplate
         /// Represents a serializable data entry stored in a <see cref="Backup"/>.
         /// Must be cloneable and have a unique identifying name.
         /// </summary>
-        public interface IData : ICloneable { Type Type { get; } }
+        public interface IData : ICloneable { public void Generate(); }
 
         #endregion
 
@@ -97,7 +97,7 @@ namespace ProjectTemplate
         /// <param name="newDatas">The array of data object to store in the backup.</param>
         public void AddData<T>(T newData) where T : IData
         {
-            if (newData != null && !Datas.Any(d => d.Type == newData.Type))
+            if (newData != null && !Datas.Any(d => d.GetType() == newData.GetType()))
             {
                 Datas.Add(newData);
             }
@@ -112,7 +112,7 @@ namespace ProjectTemplate
         /// <returns><c>True</c> if a data entry of the specified type was found; otherwise, <c>False</c>.</returns>
         public bool TryGetData<T>(out T data) where T : IData
         {
-            var found = Datas.FirstOrDefault(d => d.Type == typeof(T));
+            var found = Datas.FirstOrDefault(d => d.GetType() == typeof(T));
 
             if (found is T casted)
             {
