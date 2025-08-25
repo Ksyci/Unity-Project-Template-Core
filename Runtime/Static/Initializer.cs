@@ -69,7 +69,6 @@ namespace ProjectTemplate
 
             CreateManager<ScenesManager>(folder.transform);
             CreateManager<BackupsManager>(folder.transform);
-            CreateManager<DatasManager>(folder.transform);
             CreateManager<SettingsManager>(folder.transform);
             CreateManager<UIsManager>(folder.transform);
             CreateManager<LanguagesManager>(folder.transform);

@@ -32,7 +32,7 @@ namespace ProjectTemplate
                 _backups.Add(backup.Index, backup);
             }
 
-            ActiveBackup = ProjectProperties.Get().BackupsConfiguration.GetActiveBackup(_backups.Values);
+            ActiveBackup = _backups.FirstOrDefault(b => b.Value.IsActive).Value;
         }
 
         #endregion
@@ -164,7 +164,6 @@ namespace ProjectTemplate
         {
             try
             {
-                DatasManager.Instance.SaveDatas(backup);
                 CaptureScreenshot(backup);
                 WriteBackup(backup);
             }
@@ -178,9 +177,10 @@ namespace ProjectTemplate
         {
             try
             {
-                ChangeActiveBackup(backup);
+                string path = Path.Combine(BackupsFolder, backup.Path + BACKUP_EXTENSION);
+                _backups[backup.Index] = ReadBackup(path);
+                ChangeActiveBackup(_backups[backup.Index]);
                 ScenesManager.Instance.LoadScene(backup.Scene);
-                DatasManager.Instance.LoadDatas(backup);
             }
             catch (NullReferenceException e)
             {
@@ -242,7 +242,7 @@ namespace ProjectTemplate
 
                     Debug.Log(AUTOSAVE_WARNING);
 
-                    SaveActiveBackup();
+                    WriteBackup(ActiveBackup);
 
                     _autosaveTimer = 0.0f;
                 }
@@ -265,19 +265,18 @@ namespace ProjectTemplate
 
         #region Private Methods
 
-        private partial void ChangeActiveBackup(Backup backup) 
-            => ProjectProperties.Get().BackupsConfiguration.SetActiveBackup(ActiveBackup = backup);
-
-        private partial void SaveActiveBackup()
+        private partial void ChangeActiveBackup(Backup backup)
         {
-            try
+            if(ActiveBackup != null)
             {
-                WriteBackup(ActiveBackup);
-                DatasManager.Instance.SaveDatas(ActiveBackup);
+                ActiveBackup.IsActive = false;
             }
-            catch (NullReferenceException e)
+
+            ActiveBackup = backup;
+
+            if (ActiveBackup != null)
             {
-                Error.Warn(e);
+                ActiveBackup.IsActive = true;
             }
         }
 

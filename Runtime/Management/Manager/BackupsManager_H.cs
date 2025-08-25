@@ -126,11 +126,6 @@ namespace ProjectTemplate
         public partial void StopAutosave();
 
         /// <summary>
-        /// Save the <see cref="ActiveBackup"/> to disk.
-        /// </summary>
-        private partial void SaveActiveBackup();
-
-        /// <summary>
         /// Changes the currently <see cref="ActiveBackup"/>.
         /// </summary>
         /// <param name="backup">The backup to set as active.</param>

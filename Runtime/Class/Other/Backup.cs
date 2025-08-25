@@ -2,6 +2,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 namespace ProjectTemplate
 {
@@ -24,6 +25,9 @@ namespace ProjectTemplate
         #region Properties
 
         [JsonProperty]
+        public bool IsActive { get; set; }
+
+        [JsonProperty]
         public int Hash { get; private set; }
 
         [JsonProperty]
@@ -43,9 +47,6 @@ namespace ProjectTemplate
 
         [JsonIgnore]
         public string Path => Hash == 0 ? Name : Name + '(' + Hash + ')';
-
-        [JsonIgnore]
-        public IReadOnlyList<IData> BackupDatas => Datas;
 
         #endregion
 
@@ -77,8 +78,16 @@ namespace ProjectTemplate
         /// <param name="backup">The existing backup to duplicate.</param>
         /// <param name="hash">The new unique hash identifier.</param>
         /// <param name="index">The new index position.</param>
-        public Backup(Backup backup, int hash, int index) : this(backup.Name, hash, index) 
-            => Scene = backup.Scene;
+        public Backup(Backup backup, int hash, int index) : this(backup.Name, hash, index)
+        {
+            Scene = backup.Scene;
+
+            foreach (IData data in backup.Datas)
+            {
+                IData copy = data.Clone() as IData;
+                Datas.Add(copy);
+            }
+        }
 
         /// <summary>
         /// Adds a new datas entry of the specified type if it is not null and not already present.
@@ -86,25 +95,33 @@ namespace ProjectTemplate
         /// <typeparam name="T">The type of data to add.</typeparam>
         /// <param name="isOverrided">True: the datas are overrided; False: They are not.</param>
         /// <param name="newDatas">The array of data object to store in the backup.</param>
-        public void AddData<T>(bool isOverrided, T newData) where T : IData
+        public void AddData<T>(T newData) where T : IData
         {
-            if (newData != null)
+            if (newData != null && !Datas.Any(d => d.Type == newData.Type))
             {
-                IData data = Datas.FirstOrDefault(d => d.Type == newData.Type);
-
-                if (data != null)
-                {
-                    if (isOverrided)
-                    {
-                        int index = Datas.IndexOf(data);
-                        Datas[index] = newData;
-                    }
-                }
-                else
-                {
-                    Datas.Add(newData);
-                }
+                Datas.Add(newData);
             }
+        }
+
+        /// <summary>
+        /// Attempts to retrieve a data entry of the specified type <typeparamref name="T"/> from the backup.
+        /// </summary>
+        /// <typeparam name="T">The type of data to search for. Must implement <see cref="IData"/>.</typeparam>
+        /// <param name="data">When this method returns, contains the data entry of type <typeparamref name="T"/> 
+        /// if found; otherwise, the default value of <typeparamref name="T"/>.</param>
+        /// <returns><c>True</c> if a data entry of the specified type was found; otherwise, <c>False</c>.</returns>
+        public bool TryGetData<T>(out T data) where T : IData
+        {
+            var found = Datas.FirstOrDefault(d => d.Type == typeof(T));
+
+            if (found is T casted)
+            {
+                data = casted;
+                return true;
+            }
+
+            data = default;
+            return false;
         }
 
         #endregion
