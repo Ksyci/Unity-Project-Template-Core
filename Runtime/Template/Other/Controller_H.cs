@@ -10,7 +10,7 @@ namespace ProjectTemplate
     {
         #region Variables
 
-        [SerializeReference]
+        [SerializeField]
         protected KeyEvent[] _events;
 
         #endregion

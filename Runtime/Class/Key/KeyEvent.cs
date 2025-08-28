@@ -12,7 +12,7 @@ namespace ProjectTemplate
     {
         #region Serialized
 
-        [SerializeField, HideInInspector]
+        [SerializeField]
         private string _name;
 
         [SerializeField]
